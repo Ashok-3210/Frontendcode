@@ -1,0 +1,21 @@
+.top-bar{
+    background-image:linear-gradient(79deg, #7439db, #C66FBC 48%, #F7944D);
+}
+.Logout{
+    margin-left: 990px;
+    margin-top:20px;
+    margin-bottom: 10px;
+}
+.top-bar ul li{
+    margin-left: 500px;
+    padding: 30px;
+
+}
+.top-bar ul li a{
+    color: aliceblue;
+}
+.groups-table{
+    display: flex;
+  flex-direction: column;
+  align-items: center;
+}

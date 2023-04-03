@@ -1,9 +1,9 @@
-
 import React, { useState,useEffect } from "react";
 import axios from "axios";
 export const Register = (props) => {
     
     const [file, setFile] = useState();
+    const [filename, setFilename] = useState();
     const [inputValues, setInputValue] = useState({
         Name: "",
         moblie: "",
@@ -24,20 +24,34 @@ export const Register = (props) => {
         console.log(e.target.files);
         const { name, value } = e.target;
        setInputValue({ ...inputValues, [name]: value });
-        setFile(URL.createObjectURL(e.target.files[0]));
+      
     }
+
+    function handleChangefile(e){
+      console.log(e.target.files[0].name);
+      setFilename(e.target.files[0].name)
+      setFile(URL.createObjectURL(e.target.files[0]));
+    }
+  
     
 
     const handleSubmit = (e) => {
      console.log(file);
-       let body = {
+       const data= {
+        ID: 0,
         Name:e.target.Name.value,
         Moblie_Number: e.target.moblie.value,
         Email: e.target.email.value,
-        ProfilePic: file.name
+        Status: 0,
+        ProfilePic:filename,
        }
-    axios.post('https://localhost:7041/api/User/register', body)
-    .then(response => console.log(response));
+    axios.post("https://localhost:7041/api/User/register", data)
+    .then(res=>{console.log(res);
+    alert("Record inserted")})
+    .catch(res=>{
+      console.log(res);
+      alert("Record is not inserted")
+    })
     }
     const checkValidation = () => {
         let errors = validation;
@@ -68,13 +82,13 @@ export const Register = (props) => {
     
         // // email validation
         // const emailCond =
-        //   "/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:.[a-zA-Z0-9-]+)*$/";
+        //   "/^[a-zA-Z0-9.!#$%&'+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:.[a-zA-Z0-9-]+)$/";
         if (!inputValues.email.trim()) {
           errors.email = "Email is required";
-        } else if (inputValues.email.match(/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:.[a-zA-Z0-9-]+)*$/)) {
+        } else if (inputValues.email.match(/^[a-zA-Z0-9.!#$%&'+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:.[a-zA-Z0-9-]+)$/)) {
           errors.email = "";
         } else {
-          errors.email = "Please ingress a valid email address";
+          errors.email = "Please enter a valid email address";
         }
     
         //password validation
@@ -113,7 +127,11 @@ export const Register = (props) => {
         checkValidation();
       }, [inputValues]);
     return (
-        <div className="auth-form-container">
+        <div className="auth-form-container"> 
+            <img src="https://www.terralogic.com/wp-content/themes/terralogic/img/brand-logo.svg" width="200" height="200"/>
+          {/* <div  className='col-md-6 img'>
+               <img src="https://www.terralogic.com/wp-content/themes/terralogic/img/brand-logo.svg" width="200" height="200"/>
+            </div> */}
             <h2>Register</h2>
         <form className="register-form" onSubmit={handleSubmit}>
             <div className="form-control">
@@ -176,7 +194,8 @@ export const Register = (props) => {
             />
           </div> */}
             <label htmlFor="pic">Profile pic</label>
-            <input type="file" onChange={handleChange} />
+            <input id="pic" type="file"  onChange={handleChangefile}
+            value={false.ProfilePic} />
             <img src={file} height="150px" width="300px"/>
             <button type="submit">Register</button>
         </form>
